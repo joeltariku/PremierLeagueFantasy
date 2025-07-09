@@ -1,0 +1,45 @@
+.player-card {
+    display: flex;
+    height: 12vh;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    padding: 1%;
+    background-color: #6643b5;
+}
+
+.player-container {
+    display: flex;
+    flex-direction: column;
+    /*border: 2px solid blue;*/
+    justify-content: space-between;
+    width: 50%;
+    padding-left: 0.5rem;
+}
+
+.team-info {
+    display: flex;
+    /*border: 2px solid black;*/
+    gap: 10px;
+    font-size:75%;
+    height: 25%;
+    align-items: center;
+}
+
+.player-photo {
+    border-radius: 15px;
+}
+
+.team-logo {
+    height: 90%;
+    width: auto;
+}
+
+.player-name {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.team-name {
+    font-size: 0.75rem;
+    color: lightgray
+}
