@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = "http://localhost:3001/api/topscorers"
+const baseUrl = "/api/topscorers"
 
 const getTopScorers = async (season: number, leagueId: number) => {
     const topScorers = 
