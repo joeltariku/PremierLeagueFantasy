@@ -1,6 +1,6 @@
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors');
+//const cors = require('cors');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -8,7 +8,7 @@ dotenv.config();
 const app = express();
 const PORT = 3001;
 
-app.use(cors());
+//app.use(cors());
 app.use(express.static('dist'))
 
 
