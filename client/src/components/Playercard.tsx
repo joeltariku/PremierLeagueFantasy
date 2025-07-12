@@ -1,20 +1,25 @@
-const PlayerCard = () => {
-    const player = {
-        "firstname": "Kylian",
-        "lastname": "Mbappe",
-        "goals": 30,
-        "photo": "https://media.api-sports.io/football/players/278.png",
-        "team_logo": "https://media.api-sports.io/football/teams/85.png",
-        "team_name": "Paris Saint Germain"
-    }
+export interface Player {
+    name: string,
+    goals: number,
+    photo: string,
+    team_logo: string,
+    team_name: string,
+    id: string,
+}
+
+interface Props {
+  player: Player
+}
+
+const PlayerCard: React.FC<Props> = ({ player }) => {
 
     return (
         <div className="player-card">
             <img src={player.photo} className="player-photo" />
             <div className="player-container">
-                <div className="player-name">{player.firstname} {player.lastname}</div>
+                <div className="player-name">{player.name}</div>
                     <div className="team-info">
-                        <img src={player.team_logo} className="team-logo"/>
+                        <img src={player.team_logo} className="team-logo" loading="lazy"/>
                         <div className="team-name">
                             {player.team_name}
                         </div>

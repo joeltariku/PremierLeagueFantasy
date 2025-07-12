@@ -1,10 +1,10 @@
-import PlayerCard from "./components/Playercard"
+import TopScorers from "./components/TopScorers"
 
 function App() {
 
   return (
     <>
-      <PlayerCard />
+      <TopScorers />
     </>
   )
 }

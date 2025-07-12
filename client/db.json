@@ -1,0 +1,31 @@
+{
+    "players": [
+        {
+            "firstname": "Kylian",
+            "lastname": "Mbappe",
+            "goals": 30,
+            "photo": "https://media.api-sports.io/football/players/278.png",
+            "team_logo": "https://media.api-sports.io/football/teams/85.png",
+            "team_name": "Paris Saint Germain"
+        }, 
+        {
+            "firstname": "Kylian",
+            "lastname": "Mbappe",
+            "goals": 30,
+            "photo": "https://media.api-sports.io/football/players/278.png",
+            "team_logo": "https://media.api-sports.io/football/teams/85.png",
+            "team_name": "Paris Saint Germain"
+        },
+        {
+            "firstname": "Kylian",
+            "lastname": "Mbappe",
+            "goals": 30,
+            "photo": "https://media.api-sports.io/football/players/278.png",
+            "team_logo": "https://media.api-sports.io/football/teams/85.png",
+            "team_name": "Paris Saint Germain"
+        }
+    ],
+    "games": [
+        
+    ]
+}
