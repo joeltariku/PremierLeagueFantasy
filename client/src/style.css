@@ -1,6 +1,16 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color:#ececec
+}
+
 .player-card {
     display: flex;
-    height: 12vh;
+    height: 20%;
     justify-content: flex-start;
     box-sizing: border-box;
     padding: 1%;
@@ -10,10 +20,9 @@
 .player-container {
     display: flex;
     flex-direction: column;
-    /*border: 2px solid blue;*/
     justify-content: space-between;
-    width: 50%;
     padding-left: 0.5rem;
+    flex-grow: 1;
 }
 
 .team-info {
@@ -42,4 +51,80 @@
 .team-name {
     font-size: 0.75rem;
     color: lightgray
+}
+
+.playercard {
+
+}
+
+.top5-outer {
+    background-color: white;
+}
+.top5 {
+    flex: 1 1 22%;     /* Tries to be 22%, can grow/shrink */
+    min-width: 450px;  /* Prevents it from getting too small */
+    max-width: 25%;    /* Prevents it from stretching too much */
+    height: 50dvh;
+}
+
+.dashboard-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.playercard {
+    display: flex;
+    height: 20%;
+    align-items: center;
+}
+
+.playercard-rank {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0.3rem;
+}
+
+.playercard img {
+    height: 70%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+}
+
+.playercard-names-container {
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 1%;
+}
+
+.playercard-player-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.playercard-team-name {
+    font-size: 0.75rem;
+}
+
+.playercard-stats {
+    margin-left: 50%;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+a {
+    margin-left: 10px;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    background: #38003c;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-bottom: 2rem;
 }

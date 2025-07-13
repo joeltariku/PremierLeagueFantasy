@@ -4,7 +4,7 @@ export interface Player {
     photo: string,
     team_logo: string,
     team_name: string,
-    id: string,
+    //id: string,
 }
 
 interface Props {
