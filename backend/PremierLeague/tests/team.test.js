@@ -1,9 +1,9 @@
-// const { test, after, beforeEach } = require('node:test')
-const mongoose = require('mongoose')
-const supertest = require('supertest')
-const app = require('../../app')
-const Team = require('../models/team')
-const axios = require('axios')
+import { jest } from '@jest/globals'
+import mongoose from 'mongoose'
+import supertest from 'supertest'
+import app from '../../app.js'
+import Team from '../models/team.js'
+import axios from 'axios'
 
 jest.mock('axios', () => {
     const actual = jest.requireActual('axios')
@@ -141,7 +141,6 @@ describe('Testing the /api/premierleague/teams endpoint', () => {
                 .query({ league: 39, season: 2025 })
                 .expect(200);
 
-            console.log(response.body)
 
             expect(response.body.length).toBe(teams.length)
         })
