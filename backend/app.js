@@ -1,10 +1,10 @@
-const express = require('express');
-const axios = require('axios');
+import express from 'express';
+import axios from 'axios';
 //const cors = require('cors');
-const dotenv = require('dotenv');
-const mongoose = require('mongoose')
-const Team = require('./PremierLeague/models/team')
-const teamsRouter = require('./PremierLeague/controllers/team')
+import dotenv from 'dotenv'
+import mongoose from 'mongoose';
+import Team from './PremierLeague/models/team.js'
+import teamsRouter from './PremierLeague/controllers/team.js'
 
 dotenv.config();
 
@@ -69,4 +69,4 @@ app.get('/api/allplayers', async (req, res) => {
 
 app.use('/api/premierleague', teamsRouter)
 
-module.exports = app
+export default app

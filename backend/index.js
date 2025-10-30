@@ -1,6 +1,6 @@
-const app = require('./app')
-const config = require('./utils/config')
+import app from './app.js';
+import {PORT} from './utils/config.js'
 
-app.listen(config.PORT, () => {
-  console.log(`Proxy backend running on http://localhost:${config.PORT}`);
+app.listen(PORT, () => {
+  console.log(`Proxy backend running on http://localhost:${PORT}`);
 });

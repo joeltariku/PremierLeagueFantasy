@@ -1,6 +1,7 @@
-const Team = require('../models/team');
-const teamsRouter = require('express').Router()
-const axios = require('axios')
+import Team from '../models/team.js'
+import express from 'express';
+const teamsRouter = express.Router()
+import axios from 'axios';
 
 teamsRouter.get('/teams', async (req, res) => {
     try {
@@ -61,4 +62,4 @@ teamsRouter.delete('/teams', async (req, res) => {
   res.status(201).end();
 })
 
-module.exports = teamsRouter
+export default teamsRouter
