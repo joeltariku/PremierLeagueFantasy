@@ -1,16 +1,9 @@
-import { Pool } from "pg";
 import dotenv from 'dotenv'
 import { League } from "../types/league";
+import { conn } from "../../utils/db";
 
 dotenv.config()
 
-const conn = new Pool({
-    host: 'localhost',
-    user: 'postgres',
-    port: Number(process.env.PG_PORT),
-    password: process.env.PG_PASSWORD,
-    database: 'FantasyPL'
-})
 
 export const getAllLeagues = async () => {
     const fetch_query = 'SELECT * FROM leagues'
@@ -42,5 +35,3 @@ export const deleteAllLeagues = async () => {
     const result = await conn.query(delete_query)
     return result.rowCount
 }
-
-export { conn }

@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, jest } from '@jest/globals'
 import { QueryResult } from "pg";
-import { getAllLeagues, getLeagueById, insertLeague, deleteLeagueById, deleteAllLeagues, conn } from '../leagueService';
+import { getAllLeagues, getLeagueById, insertLeague, deleteLeagueById, deleteAllLeagues } from '../leagueService';
 import { League } from '../../types/league';
+import { conn } from '../../../utils/db';
 
 jest.mock('pg', () => ({
     Pool: jest.fn().mockImplementation(() => ({

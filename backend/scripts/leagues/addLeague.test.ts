@@ -1,11 +1,15 @@
 import axios, { AxiosRequestConfig } from "axios";
 import * as addLeagueModule from "./addLeague";
-import { insertLeague, conn } from "../../PremierLeague/services/leagueService";
+import { insertLeague } from "../../PremierLeague/services/leagueService";
+import { conn } from "../../utils/db";
 
 jest.mock('axios')
 
 jest.mock('../../PremierLeague/services/leagueService', () => ({
     insertLeague: jest.fn(),
+}))
+
+jest.mock('../../utils/db', () => ({
     conn: { end: jest.fn() }
 }))
 

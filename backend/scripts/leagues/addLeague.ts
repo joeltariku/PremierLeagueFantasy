@@ -2,13 +2,13 @@ import axios from "axios";
 import dotenv from 'dotenv'
 import { League } from "../../PremierLeague/types/league.ts";
 import { insertLeague } from "../../PremierLeague/services/leagueService.ts";
-import { conn } from "../../PremierLeague/services/leagueService.ts";
+import { conn } from "../../utils/db.ts";
 
 dotenv.config()
 
 const getLeagueFromAPI = async (id: number): Promise<League | null> => {
     try {
-        const response = await axios .get('https://v3.football.api-sports.io/leagues', {
+        const response = await axios.get('https://v3.football.api-sports.io/leagues', {
             headers: {
             'x-rapidapi-host': 'v3.football.api-sports.io',
             'x-rapidapi-key': process.env.API_KEY
