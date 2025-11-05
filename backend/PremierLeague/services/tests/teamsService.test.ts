@@ -38,7 +38,7 @@ const mockSeason: Season = {
 
 const mockTeamsAPIResponse: TeamsAPIResponse = {
     get: "teams",
-    paramaters: {
+    parameters: {
         league: '39',
         season: '2025'
     },
