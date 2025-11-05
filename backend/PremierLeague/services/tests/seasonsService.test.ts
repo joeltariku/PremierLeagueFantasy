@@ -2,7 +2,7 @@ import { jest } from '@jest/globals'
 import { Season } from '../../types/seasons'
 import { conn } from '../../../utils/db'
 import { QueryResult } from 'pg'
-import { deleteSeasonByLeagueIdAndName, insertSeason } from '../seasonsService'
+import { deleteSeasonByLeagueIdAndName, getSeasonById, insertSeason } from '../seasonsService'
 
 jest.mock('pg', () => ({
     Pool: jest.fn().mockImplementation(() => ({
@@ -14,8 +14,8 @@ const mockSeasons: Season[] = [
     {
         id: 11,
         name: '2025/26',
-        start_date: '2025-08-01',
-        end_date: '2026-07-31',
+        start_date: new Date('2025-08-01'),
+        end_date: new Date('2026-07-31'),
         league_id: 39
     }
 ]
@@ -45,5 +45,14 @@ describe('Seasons Service', () => {
             [mockSeason.league_id, mockSeason.name]
         )
         expect(result).toEqual(mockSeasons.length)
+    })
+    it('getSeasonById is called with right query and returns first row', async () => {
+        const mockSeason = mockSeasons[0]
+        const result = await getSeasonById(mockSeason.id)
+        expect(conn.query).toHaveBeenCalledWith(
+            'SELECT * FROM seasons WHERE id = $1',
+            [mockSeason.id]
+        )
+        expect(result).toEqual(mockSeasons[0])
     })
 })
