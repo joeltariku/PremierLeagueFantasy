@@ -1,3 +1,5 @@
+import { APIResponse } from "./response";
+
 export interface APITeam {
     team: {
         id: number;
@@ -19,14 +21,4 @@ export interface APITeam {
     };
 }
 
-export interface TeamsAPIResponse {
-    get: string;
-    paramaters: Record<string, string>;
-    errors: Record<string, string> | string[];
-    results: number;
-    paging: {
-        current: number;
-        total: number;
-    };
-    response: APITeam[];
-}
+export type TeamsAPIResponse = APIResponse<APITeam>
