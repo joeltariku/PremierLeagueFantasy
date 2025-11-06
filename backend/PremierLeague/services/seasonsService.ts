@@ -16,3 +16,9 @@ export const deleteSeasonByLeagueIdAndName = async (name: string, league_id: num
     const result = await conn.query(delete_query, [league_id, name])
     return result.rowCount
 }
+
+export const getSeasonById = async (seasonId: number): Promise<Season | undefined> => {
+    const fetch_query = 'SELECT * FROM seasons WHERE id = $1'
+    const result = await conn.query(fetch_query, [seasonId])
+    return result.rows[0]
+}
