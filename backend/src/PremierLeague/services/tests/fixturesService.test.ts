@@ -2,15 +2,14 @@ import { jest } from '@jest/globals'
 import { Fixture } from '../../types/fixture'
 import { Season } from '../../types/seasons'
 import { FixtureAPIResposne } from '../../types/API-Football/fixture'
-import { conn } from '../../../utils/db'
 import { QueryResult } from 'pg'
-import * as FixturesService from '../fixturesService'
+import { fixturesRepo } from '../../repos/fixturesRepo'
+import { seasonsRepo } from '../../repos/seasonsRepo'
+import { makeFixturesService } from '../fixturesService'
 
-jest.mock('pg', () => ({
-    Pool: jest.fn().mockImplementation(() => ({
-        query: jest.fn()
-    }))
-}))
+const mockDB = {
+    query: jest.fn<(query: string, values?: any[]) => Promise<QueryResult<any>>>()
+}
 
 const mockFixtures: Fixture[] = [
     {
@@ -201,232 +200,71 @@ const mockFixtureAPIResponse: FixtureAPIResposne = {
     ]
 }
 
+const mockInsertFixtures = jest.fn<(fixtures: Fixture[]) => Promise<number>>().mockResolvedValue(mockFixtures.length)
+const mockUpdateFixtures = jest.fn<(fixtures: Fixture[]) => Promise<number>>().mockResolvedValue(mockFixtures.length)
+
+const mockGetSeasonById = jest.fn<(seasonId: number) => Promise<Season | undefined>>().mockResolvedValue(mockSeason)
+
+const mockFixturesRepo: Pick<typeof fixturesRepo, 'insertFixtures' | 'updateFixtures'> = {
+    insertFixtures: mockInsertFixtures,
+    updateFixtures: mockUpdateFixtures,
+}
+const mockSeasonsRepo: Pick<typeof seasonsRepo, 'getSeasonById'> = {
+    getSeasonById: mockGetSeasonById
+}
+
+const mockGetAPIFixturesFromSeason = jest.fn<(seasonId: number) => Promise<FixtureAPIResposne>>()
+const mockGetAPIFixturesFromSeasonGameweek =  jest.fn<(seasonId: number, gameweek: number) => Promise<FixtureAPIResposne>>().mockResolvedValue(mockFixtureAPIResponse) 
+
+const mockFixturesService = makeFixturesService({
+    fixturesRepo: mockFixturesRepo,
+    seasonsRepo: mockSeasonsRepo,
+    getAPIFixturesFromSeason: mockGetAPIFixturesFromSeason,
+    getAPIFixturesFromSeasonGameweek: mockGetAPIFixturesFromSeasonGameweek,
+})
+
 describe('Fixtures Service', () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        jest.spyOn(conn, 'query').mockResolvedValue({
+        mockDB.query.mockResolvedValue({
             rows: mockFixtures,
             rowCount: mockFixtures.length
         } as QueryResult<Fixture>)
-    })
-    it('getAllFixturesFromSeason makes correct query and returns all rows', async () => {
-        const result = await FixturesService.getAllFixtursFromSeason(9)
-        expect(conn.query).toHaveBeenCalledWith('SELECT * FROM fixtures WHERE season_id = $1', [9])
-        expect(result).toEqual(mockFixtures)
-    })
-    it('getFixturesFromSeasonGameweek makes correct query and returns all rows', async () => {
-        const result = await FixturesService.getFixutresFromSeasonGameweek(9, 14)
-        expect(conn.query).toHaveBeenCalledWith('SELECT * FROM fixtures WHERE season_id = $1 AND gameweek = $2', [9, 14])
-        expect(result).toEqual(mockFixtures)
-    })
-    it('getFixtureById makes correct query and returns first row', async () => {
-        const result = await FixturesService.getFixtureById(1)
-        expect(conn.query).toHaveBeenCalledWith('SELECT * FROM fixtures WHERE id = $1', [1])
-        expect(result).toEqual(mockFixtures[0])
-    })
-    it('insertFixtures makes correct query and returns first row', async () => {
-        const mockFixture = mockFixtures[0]
-        const { id, season_id, gameweek, date, home_team_id, away_team_id, status, home_goals, away_goals } = mockFixture
-        const result = await FixturesService.insertFixture(mockFixture)
-        expect(conn.query).toHaveBeenCalledWith(
-            `INSERT INTO fixtures (id, season_id, gameweek, date, home_team_id, away_team_id, status, home_goals, away_goals) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
-            [id, season_id, gameweek, date, home_team_id, away_team_id, status, home_goals, away_goals]
-        )
-        expect(result).toEqual(mockFixture)
-    })
-    it('insertFixtures properly handles when getFixtureById returns an existing team and undefined team', async () => {
-        const mockGetFixtureById = jest.fn<(fixtureId: number) => Promise<Fixture | undefined>>()
-        mockGetFixtureById
-            .mockResolvedValueOnce(undefined)
-            .mockResolvedValueOnce(mockFixtures[1])
-
-        const mockInsertFixture = jest.fn<(fixture: Fixture) => Promise<Fixture>>()
-        mockInsertFixture.mockResolvedValue(mockFixtures[1])
-
-        const result = await FixturesService.insertFixtures(mockFixtures, {
-            getFixtureById: mockGetFixtureById,
-            insertFixture: mockInsertFixture
-        })
-
-        expect(mockGetFixtureById).toHaveBeenCalledTimes(2)
-        expect(mockInsertFixture).toHaveBeenCalledTimes(1)
-
-        expect(mockGetFixtureById).toHaveBeenCalledWith(1)
-        expect(mockInsertFixture).toHaveBeenCalledWith(mockFixtures[0])
-
-        expect(mockGetFixtureById).toHaveBeenCalledWith(2)
-        
-        expect(result).toEqual(1)
-    })
-    it('insertFixtures properly handles when fixtures array is empty', async () => {
-        const mockGetFixtureById = jest.fn<(fixtureId: number) => Promise<Fixture | undefined>>()
-        mockGetFixtureById
-            .mockResolvedValueOnce(undefined)
-            .mockResolvedValueOnce(mockFixtures[1])
-
-        const mockInsertFixture = jest.fn<(fixture: Fixture) => Promise<Fixture>>()
-        mockInsertFixture.mockResolvedValue(mockFixtures[1])
-
-        const result = await FixturesService.insertFixtures([], {
-            getFixtureById: mockGetFixtureById,
-            insertFixture: mockInsertFixture
-        })
-
-        expect(result).toEqual(0)
-        expect(mockGetFixtureById).toHaveBeenCalledTimes(0)
-        expect(mockInsertFixture).toHaveBeenCalledTimes(0)
-    })
-    it('addFixturesForSeason returns size of api response when all fixtures are inserted', async () => {
-        const mockGetSeasonById = jest.fn<(seasonId: number) => Promise<Season | undefined>>()
+        mockGetAPIFixturesFromSeason.mockResolvedValue(mockFixtureAPIResponse)
+        mockGetAPIFixturesFromSeasonGameweek.mockResolvedValue(mockFixtureAPIResponse)
         mockGetSeasonById.mockResolvedValue(mockSeason)
-
-        const mockGetFixturesFromSeason = jest.fn<(seasonId: number) => Promise<FixtureAPIResposne>>()
-        mockGetFixturesFromSeason.mockResolvedValue(mockFixtureAPIResponse)
-
-        const mockInsertFixtures = jest.fn<(fixtures: Fixture[]) => Promise<number>>()
-
-        await FixturesService.addFixturesForSeason(9, {
-            getSeasonById: mockGetSeasonById,
-            getFixturesFromSeason: mockGetFixturesFromSeason,
-            insertFixtures: mockInsertFixtures
+        mockInsertFixtures.mockResolvedValue(mockFixtures.length)
+        mockUpdateFixtures.mockResolvedValue(mockFixtures.length)
+    })
+    describe('addFixturesForSeason', () => {
+        it('addFixturesForSeason returns number of inserted fixtures', async () => {
+            const result = await mockFixturesService.addFixturesForSeason(9)
+            expect(mockSeasonsRepo.getSeasonById).toHaveBeenCalledWith(9)
+            expect(mockGetAPIFixturesFromSeason).toHaveBeenCalledWith(9)
+            expect(mockFixturesRepo.insertFixtures).toHaveBeenCalledWith(mockFixtures)
+            expect(result).toEqual(mockFixtures.length)
         })
+        it('addFixturesForSeason throws an error when getSeasonById returns undefined', async () => {
+            mockGetSeasonById.mockResolvedValueOnce(undefined)
 
-        expect(mockGetSeasonById).toHaveBeenCalledWith(9)
-        expect(mockGetFixturesFromSeason).toHaveBeenCalledWith(9)
-        expect(mockInsertFixtures).toHaveBeenCalledWith([
-            {
-                id: mockFixtures[0].id,
-                season_id: mockFixtures[0].season_id,
-                gameweek: mockFixtures[0].gameweek,
-                date: mockFixtures[0].date,
-                home_team_id: mockFixtures[0].home_team_id,
-                away_team_id: mockFixtures[0].away_team_id,
-                status: mockFixtures[0].status,
-                home_goals: mockFixtures[0].home_goals,
-                away_goals: mockFixtures[0].away_goals
-            }, 
-            {
-                id: mockFixtures[1].id,
-                season_id: mockFixtures[1].season_id,
-                gameweek: mockFixtures[1].gameweek,
-                date: mockFixtures[1].date,
-                home_team_id: mockFixtures[1].home_team_id,
-                away_team_id: mockFixtures[1].away_team_id,
-                status: mockFixtures[1].status,
-                home_goals: mockFixtures[1].home_goals,
-                away_goals: mockFixtures[1].away_goals
-            }
-        ])
-    })
-    it('addFixturesForSeason throws an error when getSeasonById returns undefined', async () => {
-        const mockGetSeasonById = jest.fn<(seasonId: number) => Promise<Season | undefined>>()
-        mockGetSeasonById.mockResolvedValue(undefined)
-
-        const mockGetFixturesFromSeason = jest.fn<(seasonId: number) => Promise<FixtureAPIResposne>>()
-        mockGetFixturesFromSeason.mockResolvedValue(mockFixtureAPIResponse)
-
-        const mockInsertFixtures = jest.fn<(fixtures: Fixture[]) => Promise<number>>()
-
-        await expect(FixturesService.addFixturesForSeason(9, {
-            getSeasonById: mockGetSeasonById,
-            getFixturesFromSeason: mockGetFixturesFromSeason,
-            insertFixtures: mockInsertFixtures
-        })).rejects.toThrow('Failed to get season with id = 9')
-
-        expect(mockGetFixturesFromSeason).not.toHaveBeenCalled()
-        expect(mockInsertFixtures).not.toHaveBeenCalled()
-    })
-    it('update fixtures makes correct query and returns count of updated fixtures', async () => {
-        const result = await FixturesService.updateFixtures(mockFixtures)
-
-        const sqlPattern =
-            /UPDATE\s+fixtures\s+SET\s+date\s*=\s*\$1,\s*status\s*=\s*\$2,\s*home_goals\s*=\s*\$3,\s*away_goals\s*=\s*\$4\s+WHERE\s+id\s*=\s*\$5\s+AND\s*status\s*!=\s*'Match Finished'\s+RETURNING\s*\*/;
-
-        expect(conn.query).toHaveBeenNthCalledWith(1, expect.stringMatching(sqlPattern), [
-            mockFixtures[0].date,
-            mockFixtures[0].status,
-            mockFixtures[0].home_goals,
-            mockFixtures[0].away_goals,
-            mockFixtures[0].id
-        ])
-        expect(conn.query).toHaveBeenNthCalledWith(2, expect.stringMatching(sqlPattern), [
-            mockFixtures[1].date,
-            mockFixtures[1].status,
-            mockFixtures[1].home_goals,
-            mockFixtures[1].away_goals,
-            mockFixtures[1].id
-        ])
-        expect(result).toEqual(2)
-    })
-    it('update fixtures does not count fixtures that are not updated', async () => {
-        jest.spyOn(conn, 'query').mockResolvedValue({
-            rows: [],
-            rowCount: 0
+            await expect(mockFixturesService.addFixturesForSeason(9)).rejects.toThrow('Failed to get season with id = 9')
+            expect(mockGetAPIFixturesFromSeason).not.toHaveBeenCalled()
+            expect(mockFixturesRepo.insertFixtures).not.toHaveBeenCalled()
         })
-        const result = await FixturesService.updateFixtures(mockFixtures)
-
-        expect(result).toEqual(0)
     })
     describe('updateFixturesFromSeasonGW', () => {
-        it('updateFixutresFromSeasonGW makes correct function calls', async () => {
-            const mockGetFixturesFromSeasonGameweek = jest.fn<(seasonId: number, gameweek: number) => Promise<FixtureAPIResposne>>()
-            mockGetFixturesFromSeasonGameweek.mockResolvedValue(mockFixtureAPIResponse)
-
-            const mockGetSeasonById = jest.fn<(seasonId: number) => Promise<Season | undefined>>()
-            mockGetSeasonById.mockResolvedValue(mockSeason)
-
-            const mockUpdateFixtures = jest.fn<(fixtures: Fixture[]) => Promise<number>>()
-            
-            await FixturesService.updateFixturesFromSeasonGW(9, 14, {
-                getAPIFixturesFromSeasonGameweek: mockGetFixturesFromSeasonGameweek,
-                getSeasonById: mockGetSeasonById,
-                updateFixtures: mockUpdateFixtures
-            })
-            
+        it('updateFixutresFromSeasonGW returns number of updated fixtures', async () => {
+            const result = await mockFixturesService.updateFixturesFromSeasonGW(9, 14)
             expect(mockGetSeasonById).toHaveBeenCalledWith(9)
-            expect(mockGetFixturesFromSeasonGameweek).toHaveBeenCalledWith(9, 14)
-            expect(mockUpdateFixtures).toHaveBeenCalledWith([
-                {
-                    id: mockFixtures[0].id,
-                    season_id: mockFixtures[0].season_id,
-                    gameweek: mockFixtures[0].gameweek,
-                    date: mockFixtures[0].date,
-                    home_team_id: mockFixtures[0].home_team_id,
-                    away_team_id: mockFixtures[0].away_team_id,
-                    status: mockFixtures[0].status,
-                    home_goals: mockFixtures[0].home_goals,
-                    away_goals: mockFixtures[0].away_goals
-                }, 
-                {
-                    id: mockFixtures[1].id,
-                    season_id: mockFixtures[1].season_id,
-                    gameweek: mockFixtures[1].gameweek, 
-                    date: mockFixtures[1].date,
-                    home_team_id: mockFixtures[1].home_team_id,
-                    away_team_id: mockFixtures[1].away_team_id,
-                    status: mockFixtures[1].status,
-                    home_goals: mockFixtures[1].home_goals,
-                    away_goals: mockFixtures[1].away_goals
-                }
-            ])
+            expect(mockGetAPIFixturesFromSeasonGameweek).toHaveBeenCalledWith(9, 14)
+            expect(mockUpdateFixtures).toHaveBeenCalledWith(mockFixtures)
+            expect(result).toEqual(mockFixtures.length)
         })
         it('updateFixturesFromSeasonGW throws an error when getSeasonById returns undefined', async () => {
-            const mockGetFixturesFromSeasonGameweek = jest.fn<(seasonId: number, gameweek: number) => Promise<FixtureAPIResposne>>()
-            mockGetFixturesFromSeasonGameweek.mockResolvedValue(mockFixtureAPIResponse)
+            mockGetSeasonById.mockResolvedValueOnce(undefined)
 
-            const mockGetSeasonById = jest.fn<(seasonId: number) => Promise<Season | undefined>>()
-            mockGetSeasonById.mockResolvedValue(undefined)
-
-            const mockUpdateFixtures = jest.fn<(fixtures: Fixture[]) => Promise<number>>()
-            
-            await expect(FixturesService.updateFixturesFromSeasonGW(9, 14, {
-                getAPIFixturesFromSeasonGameweek: mockGetFixturesFromSeasonGameweek,
-                getSeasonById: mockGetSeasonById,
-                updateFixtures: mockUpdateFixtures
-            })).rejects.toThrow('Cannot find season with id=9')
-
-            expect(mockGetSeasonById).toHaveBeenCalledWith(9)
-            expect(mockGetFixturesFromSeasonGameweek).not.toHaveBeenCalled()
+            await expect(mockFixturesService.updateFixturesFromSeasonGW(9, 14)).rejects.toThrow('Cannot find season with id=9')
+            expect(mockGetAPIFixturesFromSeasonGameweek).not.toHaveBeenCalled()
             expect(mockUpdateFixtures).not.toHaveBeenCalled()
         })
     })
