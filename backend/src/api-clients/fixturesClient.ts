@@ -2,10 +2,11 @@ import axios from "axios"
 import { getErrorMessages } from "../PremierLeague/services/API-Football"
 import { FixtureAPIResposne } from "../PremierLeague/types/API-Football/fixture"
 import { Season } from "../PremierLeague/types/seasons"
-import { getSeasonById } from "../PremierLeague/services/seasonsService"
+import { seasonsRepo } from "../PremierLeague/repos/seasonsRepo"
+
 
 export const getFixturesFromSeason = async (seasonId: number): Promise<FixtureAPIResposne> => {
-    const season: Season | undefined = await getSeasonById(seasonId)
+    const season: Season | undefined = await seasonsRepo.getSeasonById(seasonId)
     if (!season) {
         throw new Error(`Failed to get season with id=${seasonId}`)
     }
@@ -33,7 +34,7 @@ export const getFixturesFromSeason = async (seasonId: number): Promise<FixtureAP
 }
 
 export const getAPIFixturesFromSeasonGameweek = async (seasonId: number, gameweek: number): Promise<FixtureAPIResposne> => {
-    const season: Season | undefined = await getSeasonById(seasonId)
+    const season: Season | undefined = await seasonsRepo.getSeasonById(seasonId)
     if (!season) {
         throw new Error(`Failed to get season with id=${seasonId}`)
     }

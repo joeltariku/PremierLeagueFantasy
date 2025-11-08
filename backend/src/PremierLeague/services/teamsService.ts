@@ -1,9 +1,11 @@
 import { getTeamsFromSeason } from "../../api-clients/teamsClient"
 import { conn } from "../../utils/db"
+import { seasonsRepo } from "../repos/seasonsRepo"
 import { APITeam, TeamsAPIResponse } from "../types/API-Football/teams"
 import { Season } from "../types/seasons"
 import { Team } from "../types/teams"
-import { getSeasonById } from "./seasonsService"
+
+const { getSeasonById } = seasonsRepo
 
 export const getAllTeams = async () => {
     const fetch_query = 'SELECT * FROM teams'

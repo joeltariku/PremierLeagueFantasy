@@ -1,18 +1,21 @@
 import axios from "axios";
 import { Season } from "../PremierLeague/types/seasons";
 import { FixtureAPIResposne } from "../PremierLeague/types/API-Football/fixture";
-import { getSeasonById } from "../PremierLeague/services/seasonsService";
 import { getAPIFixturesFromSeasonGameweek, getFixturesFromSeason } from "./fixturesClient";
+import { seasonsRepo } from "../PremierLeague/repos/seasonsRepo";
 
 
 
 jest.mock('axios')
-jest.mock('../PremierLeague/services/seasonsService', () => ({
-    getSeasonById: jest.fn()
+jest.mock('../PremierLeague/repos/seasonsRepo', () => ({
+    seasonsRepo: {
+        getSeasonById: jest.fn()
+    }
 }))
 
+seasonsRepo
 const mockedAxios = axios as jest.Mocked<typeof axios>
-const mockedGetSeasonById = getSeasonById as jest.MockedFunction<typeof getSeasonById>
+const mockedGetSeasonById = seasonsRepo.getSeasonById as jest.MockedFunction<typeof seasonsRepo.getSeasonById>
 
 const mockSeason: Season = {
     id: 3,
