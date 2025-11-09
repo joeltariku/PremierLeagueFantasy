@@ -1,8 +1,8 @@
 import axios from "axios";
 import dotenv from 'dotenv'
 import { League } from "../../PremierLeague/types/league.ts";
-import { insertLeague } from "../../PremierLeague/services/leagueService.ts";
 import { conn } from "../../utils/db.ts";
+import { leaguesRepo } from "../../PremierLeague/repos/leaguesRepo.ts";
 
 dotenv.config()
 
@@ -37,7 +37,7 @@ export const addLeagueToDB = async (leagueId: number) => {
         if (!league) {
             throw new Error('Failed to fetch League from API')
         }
-        await insertLeague(league)
+        await leaguesRepo.insertLeague(league)
         console.log(`Successfully inserted: ${league.name}`)
     } catch (err) {
         throw err

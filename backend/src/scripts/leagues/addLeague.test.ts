@@ -1,17 +1,24 @@
 import axios, { AxiosRequestConfig } from "axios";
 import * as addLeagueModule from "./addLeague";
-import { insertLeague } from "../../PremierLeague/services/leagueService";
 import { conn } from "../../utils/db";
+import { leaguesRepo } from "../../PremierLeague/repos/leaguesRepo";
+
+leaguesRepo
 
 jest.mock('axios')
 
-jest.mock('../../PremierLeague/services/leagueService', () => ({
-    insertLeague: jest.fn(),
+jest.mock('../../PremierLeague/repos/leaguesRepo', () => ({
+    leaguesRepo: {
+        insertLeague: jest.fn()
+    }
 }))
 
 jest.mock('../../utils/db', () => ({
     conn: { end: jest.fn() }
 }))
+
+const mockInsertLeague = leaguesRepo.insertLeague as jest.MockedFunction<typeof leaguesRepo.insertLeague>
+
 
 describe('testing script to add a league to the database using api', () => {
     beforeEach(() => {
@@ -36,7 +43,7 @@ describe('testing script to add a league to the database using api', () => {
 
             await addLeagueModule.addLeagueToDB(39)
 
-            expect(insertLeague).toHaveBeenCalledWith({
+            expect(mockInsertLeague).toHaveBeenCalledWith({
                 id: 39,
                 name: 'Premier League',
                 base_country: 'England'
@@ -64,7 +71,7 @@ describe('testing script to add a league to the database using api', () => {
                     }
                 })
             });
-            (insertLeague as jest.Mock).mockRejectedValue(new Error('League with id already exists'))
+            (mockInsertLeague as jest.Mock).mockRejectedValue(new Error('League with id already exists'))
 
             await expect(addLeagueModule.addLeagueToDB(39)).rejects.toThrow('League with id already exists')
             expect(conn.end).toHaveBeenCalled()
