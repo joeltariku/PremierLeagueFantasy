@@ -1,6 +1,6 @@
 import axios from "axios";
 import { TeamsAPIResponse } from "../PremierLeague/types/API-Football/teams";
-import { getTeamsFromSeason } from "./teamsClient";
+import { getAPITeamsFromSeason } from "./teamsClient";
 import { parseAsync } from "@babel/core";
 
 jest.mock('axios')
@@ -74,7 +74,7 @@ describe('Testing teamsClient.ts', () => {
     describe('Testing getTeamsFromSeason', () => {
         it('axios.get is called with right parameters and returns correct data', async () => {
             mockedAxios.get.mockResolvedValue({ data: mockTeamsResponse })
-            const result = await getTeamsFromSeason(39, 2025)
+            const result = await getAPITeamsFromSeason(39, 2025)
 
             expect(mockedAxios.get).toHaveBeenCalledWith('https://v3.football.api-sports.io/teams', {
                 headers: {
@@ -99,7 +99,7 @@ describe('Testing teamsClient.ts', () => {
                 }
             })
 
-            await expect(getTeamsFromSeason(39, 2025)).rejects.toThrow('The league field must contain an integer; The season field must contain an integer')
+            await expect(getAPITeamsFromSeason(39, 2025)).rejects.toThrow('The league field must contain an integer; The season field must contain an integer')
         }) 
     })
 })

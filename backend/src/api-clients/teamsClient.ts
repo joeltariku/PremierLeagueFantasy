@@ -2,7 +2,7 @@ import axios from "axios"
 import { TeamsAPIResponse } from "../PremierLeague/types/API-Football/teams"
 import { getErrorMessages } from "../PremierLeague/services/API-Football"
 
-export const getTeamsFromSeason = async (leagueId: number, startYear: number): Promise<TeamsAPIResponse> => {
+export const getAPITeamsFromSeason = async (leagueId: number, startYear: number): Promise<TeamsAPIResponse> => {
     const response = await axios.get<TeamsAPIResponse>('https://v3.football.api-sports.io/teams', {
         headers: {
         'x-rapidapi-host': 'v3.football.api-sports.io',
