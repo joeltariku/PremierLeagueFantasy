@@ -7,6 +7,8 @@ import './style.css'
 import HomePage from './pages/HomePage.tsx'
 import TopScorers from './components/TopScorers.tsx'
 import { NotFoundPage } from './pages/NotFoundPage.tsx'
+// import FantasyLineup from './pages/FantasyLineup.tsx'
+import FantasyPLUI from './pages/FantasyPLUI.tsx'
 
 const router = createBrowserRouter([
   {
@@ -16,8 +18,16 @@ const router = createBrowserRouter([
   },
   {
     path: '/topscorers',
-    element: <TopScorers/>
+    element: <TopScorers />
   },
+  // {
+  //   path: '/lineup',
+  //   element: <FantasyLineup />
+  // },
+  {
+    path: 'fantasy',
+    element: <FantasyPLUI />
+  }
 ]);
 
 createRoot(document.getElementById('root')!).render(

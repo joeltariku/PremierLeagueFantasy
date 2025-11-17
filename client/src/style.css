@@ -242,3 +242,24 @@ h1 {
         padding: 1rem 1.25rem;
     }
 }
+
+.playercard-box {
+    border: 1px solid red; 
+    min-height: 100px;
+    max-width: 200px;
+    text-align: center;
+    background-color: green;
+}
+
+.playercard-box img {
+    display: block;
+    margin: 1rem auto;
+}
+
+.playercard-info {
+    background-color: white;
+}
+
+.fantasy-lineup-page {
+    background-color: darkgreen;
+}

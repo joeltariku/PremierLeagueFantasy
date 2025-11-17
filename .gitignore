@@ -1,6 +1,7 @@
 client/.env
 client/node_modules
 client/dist
+client/coverage
 
 backend/.env
 backend/node_modules
