@@ -35,6 +35,8 @@ const config: Config = {
     '/backend/coverage/',
     '/backend/coverage/lcov-report',
     '/backend/dist/assets/',
+    '/backend/utils/config.js',
+    '/backend/jest.config.ts'
   ],
 
   // Indicates which provider should be used to instrument code for coverage

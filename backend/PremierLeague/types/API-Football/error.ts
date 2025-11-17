@@ -1,1 +1,0 @@
-export type APIError = Record<string, string> | string[]

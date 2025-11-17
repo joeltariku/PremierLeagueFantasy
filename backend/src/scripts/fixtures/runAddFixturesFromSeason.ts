@@ -1,8 +1,8 @@
 import { fileURLToPath } from 'url'
-import { addFixturesForSeason } from '../../PremierLeague/services/fixturesService';
 import { conn } from '../../utils/db';
+import { fixturesService } from '../../PremierLeague/services/fixturesService';
 
-const __filename = fileURLToPath(import.meta.url);
+const __filename = fileURLToPath(import.meta.url)
 
 const main = async () => {
     try {
@@ -10,7 +10,7 @@ const main = async () => {
         if (isNaN(seasonId)) {
             throw new Error('Please provide a season ID (Integer)')
         }
-        const count = await addFixturesForSeason(seasonId)
+        const count = await fixturesService.addFixturesForSeason(seasonId)
         console.log(`Inserted ${count} fixtures for season ${seasonId}`)
     } catch (err) {
         console.error(err)

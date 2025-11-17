@@ -1,14 +1,19 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node index.js",
-    "dev": "cross-env NODE_ENV=development node --watch index.js",
-    "test": "jest",
+    "start": "cross-env NODE_ENV=production tsx src/index.ts",
+    "dev": "cross-env NODE_ENV=development tsx --watch src/index.ts",
+    "test": "cross-env NODE_ENV=test jest",
     "test:coverage": "cross-env NODE_ENV=test jest --coverage",
     "build:ui": "shx rm -rf dist && cd ../client && npm run build && shx cp -r dist ../backend",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
+    "add:teamsFromSeason": "npx tsx scripts/teams/executables/runAddTeamsFromSeason.ts",
+    "getFixturesFromSeason": "npx tsx scripts/fixtures/runGetFixturesFromSeason.ts",
+    "addFixturesFromSeason": "npx tsx src/scripts/fixtures/runAddFixturesFromSeason.ts",
+    "updateFixturesFromGW": "npx tsx scripts/fixtures/runUpdateFixturesFromGW.ts",
+    "getStandingsFromSeason": "npx tsx scripts/seasons/executables/runGetStandings.ts"
   },
   "type": "module",
   "author": "",
@@ -24,18 +29,27 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "mongoose": "^8.19.1",
-    "pg": "^8.16.3"
+    "pg": "^8.16.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",
     "@babel/node": "^7.28.0",
     "@babel/preset-env": "^7.28.3",
+    "@types/express": "^5.0.5",
     "@types/jest": "^30.0.0",
     "@types/pg": "^8.15.5",
+    "@types/supertest": "^6.0.3",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
+    "@types/yamljs": "^0.2.34",
     "c8": "^10.1.3",
     "jest": "^30.2.0",
     "shx": "^0.4.0",
     "supertest": "^7.1.4",
-    "tsx": "^4.20.6"
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   }
 }

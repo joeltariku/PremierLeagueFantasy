@@ -1,0 +1,76 @@
+openapi: 3.0.0
+info: 
+  title: Premier League Fantasy
+  description: This is the api documention for my Premier League Fantasy project
+  version: 1.0.0
+paths: 
+  /api/leagues:
+    get: 
+      summary: Returns all leagues stored in database
+      tags: 
+        [Leagues]
+      responses:  
+        200:
+          description: Retrieved all leagues
+          content: 
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  properties: 
+                    id: 
+                      type: integer
+                    name: 
+                      type: string
+                    base_country: 
+                      type: string
+                  example: 
+                    id: 39
+                    name: Premier League
+                    base_country: England
+  /api/leagues/{id}: 
+    get: 
+      summary: Returns league with id entered in paths
+      tags: 
+        [Leagues]
+      parameters: 
+      - name: id
+        in: path
+        required: true
+        description: ID of the league to retrieve
+      responses: 
+        200: 
+          description: League found
+          content: 
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                  name: 
+                    type: string
+                  base_country: 
+                    type: string
+                example: 
+                  id: 39
+                  name: Premier League
+                  base_country: England
+        404: 
+          description: League not found
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error:
+                    type: string
+        500: 
+          description: Failed to fetch league
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  error:
+                    type: string

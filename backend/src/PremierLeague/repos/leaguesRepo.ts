@@ -1,5 +1,5 @@
 import { QueryResult, QueryResultRow } from "pg"
-import { League } from "../types/league"
+import { League } from "../types/league.ts"
  import { conn } from "../../utils/db"
 
 type DB = {
@@ -7,7 +7,7 @@ type DB = {
 }
 
 export const makeLeaguesRepo = (db: DB) => {
-    
+
     const getAllLeagues = async (): Promise<League[]> => {
         const fetch_query = 'SELECT * FROM leagues'
         const result = await db.query<League>(fetch_query)
