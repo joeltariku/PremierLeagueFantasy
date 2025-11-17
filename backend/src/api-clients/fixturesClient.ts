@@ -1,8 +1,8 @@
 import axios from "axios"
-import { getErrorMessages } from "../PremierLeague/services/API-Football"
-import { FixtureAPIResposne } from "../PremierLeague/types/API-Football/fixture"
-import { Season } from "../PremierLeague/types/seasons"
-import { seasonsRepo } from "../PremierLeague/repos/seasonsRepo"
+import { getErrorMessages } from "../PremierLeague/services/API-Football.js"
+import { FixtureAPIResposne } from "../PremierLeague/types/API-Football/fixture.js"
+import { Season } from "../PremierLeague/types/seasons.js"
+import { seasonsRepo } from "../PremierLeague/repos/seasonsRepo.js"
 
 
 export const getFixturesFromSeason = async (seasonId: number): Promise<FixtureAPIResposne> => {

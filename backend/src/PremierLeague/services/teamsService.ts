@@ -1,10 +1,9 @@
-import { getAPITeamsFromSeason } from "../../api-clients/teamsClient"
-import { conn } from "../../utils/db"
-import { seasonsRepo } from "../repos/seasonsRepo"
-import { teamsRepo } from "../repos/teamsRepo"
-import { APITeam, TeamsAPIResponse } from "../types/API-Football/teams"
-import { Season } from "../types/seasons"
-import { Team } from "../types/teams"
+import { getAPITeamsFromSeason } from "../../api-clients/teamsClient.js"
+import { seasonsRepo } from "../repos/seasonsRepo.js"
+import { teamsRepo } from "../repos/teamsRepo.js"
+import { APITeam, TeamsAPIResponse } from "../types/API-Football/teams.js"
+import { Season } from "../types/seasons.js"
+import { Team } from "../types/teams.js"
 
 const { getSeasonById } = seasonsRepo
 

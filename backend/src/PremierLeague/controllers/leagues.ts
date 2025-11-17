@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { leaguesRepo } from '../repos/leaguesRepo.ts'
+import { leaguesRepo } from '../repos/leaguesRepo.js'
 
 const leaguesRouter = express.Router()
 

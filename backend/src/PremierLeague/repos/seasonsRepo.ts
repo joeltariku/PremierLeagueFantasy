@@ -1,6 +1,6 @@
 import { QueryResult, QueryResultRow } from "pg"
-import { NewSeason, Season } from "../types/seasons"
-import { conn } from "../../utils/db"
+import { NewSeason, Season } from "../types/seasons.js"
+import { conn } from "../../utils/db.js"
 
 type DB = {
     query: <T extends QueryResultRow>(text: string, params?: any[]) => Promise<QueryResult<T>>

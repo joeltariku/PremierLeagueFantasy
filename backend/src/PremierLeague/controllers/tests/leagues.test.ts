@@ -1,9 +1,9 @@
 import { jest } from '@jest/globals'
-import { conn } from '../../../utils/db'
+import { conn } from '../../../utils/db.js'
 import supertest from 'supertest'
-import app from '../../../app'
-import { League } from '../../types/league'
-import { leaguesRepo } from '../../repos/leaguesRepo'
+import app from '../../../app.js'
+import { League } from '../../types/league.js'
+import { leaguesRepo } from '../../repos/leaguesRepo.js'
 
 const api = supertest(app)
 

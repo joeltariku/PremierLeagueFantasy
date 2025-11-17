@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
-import * as addLeagueModule from "./addLeague";
-import { conn } from "../../utils/db";
-import { leaguesRepo } from "../../PremierLeague/repos/leaguesRepo";
+import * as addLeagueModule from "./addLeague.js";
+import { conn } from "../../utils/db.js";
+import { leaguesRepo } from "../../PremierLeague/repos/leaguesRepo.js";
 
 leaguesRepo
 

@@ -1,11 +1,11 @@
 import { jest } from '@jest/globals'
-import { Fixture } from '../../types/fixture'
-import { Season } from '../../types/seasons'
-import { FixtureAPIResposne } from '../../types/API-Football/fixture'
+import { Fixture } from '../../types/fixture.js'
+import { Season } from '../../types/seasons.js'
+import { FixtureAPIResposne } from '../../types/API-Football/fixture.js'
 import { QueryResult } from 'pg'
-import { fixturesRepo } from '../../repos/fixturesRepo'
-import { seasonsRepo } from '../../repos/seasonsRepo'
-import { makeFixturesService } from '../fixturesService'
+import { fixturesRepo } from '../../repos/fixturesRepo.js'
+import { seasonsRepo } from '../../repos/seasonsRepo.js'
+import { makeFixturesService } from '../fixturesService.js'
 
 const mockDB = {
     query: jest.fn<(query: string, values?: any[]) => Promise<QueryResult<any>>>()

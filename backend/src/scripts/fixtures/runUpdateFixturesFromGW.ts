@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'url'
-import { updateFixturesFromSeasonGW } from '../../PremierLeague/services/fixturesService';
-import { conn } from '../../utils/db';
+import { fixturesService } from '../../PremierLeague/services/fixturesService.js';
+import { conn } from '../../utils/db.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -17,7 +17,7 @@ const main = async () => {
             throw new Error('Please provide a gameweek (Integer)')
         }
 
-        const count = await updateFixturesFromSeasonGW(seasonId, gameweek)
+        const count = await fixturesService.updateFixturesFromSeasonGW(seasonId, gameweek)
         console.log(`Updated ${count} fixtures for season ${seasonId} in gameweek ${gameweek}`)
     } catch (err) {
         console.error(err)

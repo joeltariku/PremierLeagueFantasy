@@ -1,7 +1,7 @@
 import { jest } from "@jest/globals"
 import { QueryResult } from "pg"
-import { Season } from "../../types/seasons"
-import { makeSeasonsRepo } from "../seasonsRepo"
+import { Season } from "../../types/seasons.js"
+import { makeSeasonsRepo } from "../seasonsRepo.js"
 
 const mockDB = {
     query: jest.fn<(query: string, values?: any[]) => Promise<QueryResult<any>>>()

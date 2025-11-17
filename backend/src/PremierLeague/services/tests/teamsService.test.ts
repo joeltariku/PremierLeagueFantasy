@@ -1,12 +1,10 @@
 import { jest } from '@jest/globals'
 import { QueryResult } from "pg"
-import { Team } from "../../types/teams"
+import { Team } from "../../types/teams.js"
 // import * as TeamsService from '../teamsService'
-import { Season } from '../../types/seasons'
-import { TeamsAPIResponse } from '../../types/API-Football/teams'
-import { conn } from '../../../utils/db'
-import { makeTeamsService } from '../teamsService'
-import { get } from 'mongoose'
+import { Season } from '../../types/seasons.js'
+import { TeamsAPIResponse } from '../../types/API-Football/teams.js'
+import { makeTeamsService } from '../teamsService.js'
 
 
 // jest.mock('pg', () => ({

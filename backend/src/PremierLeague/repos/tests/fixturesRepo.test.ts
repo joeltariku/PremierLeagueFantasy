@@ -1,7 +1,7 @@
 import { jest } from "@jest/globals";
 import { Pool, QueryResult } from "pg";
-import { makeFixturesRepo } from "../fixturesRepo";
-import { Fixture } from "../../types/fixture";
+import { makeFixturesRepo } from "../fixturesRepo.js";
+import { Fixture } from "../../types/fixture.js";
 
 
 const mockDB = {

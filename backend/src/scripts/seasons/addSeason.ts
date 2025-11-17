@@ -1,8 +1,8 @@
 import dotenv from 'dotenv'
-import { NewSeason, Season } from '../../PremierLeague/types/seasons'
+import { NewSeason, Season } from '../../PremierLeague/types/seasons.js'
 import axios from 'axios'
-import { conn } from '../../src/utils/db'
-import { insertSeason } from '../../PremierLeague/services/seasonsService'
+import { conn } from '../../utils/db.js'
+import { seasonsRepo } from '../../PremierLeague/repos/seasonsRepo.js'
 
 dotenv.config()
 
@@ -52,7 +52,7 @@ export const addSeasonToDB = async (leagueId: number, startYear: number) => {
         if (!newSeason) {
             throw new Error('Failed to fetch Season from API')
         }
-        await insertSeason(newSeason)
+        await seasonsRepo.insertSeason(newSeason)
         console.log(`Successfully inserted ${newSeason.name}`)
     } catch (err) {
         throw err

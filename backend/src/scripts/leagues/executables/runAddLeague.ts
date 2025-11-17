@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'url'
-import { addLeagueToDB } from "../addLeague";
+import { addLeagueToDB } from "../addLeague.js";
 
 const __filename = fileURLToPath(import.meta.url);
 

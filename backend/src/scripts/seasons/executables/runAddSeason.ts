@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'url'
-import { addSeasonToDB } from '../addSeason';
+import { addSeasonToDB } from '../addSeason.js';
 
 const __filename = fileURLToPath(import.meta.url);
 

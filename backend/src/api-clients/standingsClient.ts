@@ -1,11 +1,11 @@
 import axios from "axios";
-import { getSeasonById } from "../PremierLeague/services/seasonsService";
-import { TeamStandingsAPIResponse } from "../PremierLeague/types/API-Football/teamStandings";
-import { Season } from "../PremierLeague/types/seasons";
-import { getErrorMessages } from "../PremierLeague/services/API-Football";
+import { TeamStandingsAPIResponse } from "../PremierLeague/types/API-Football/teamStandings.js";
+import { Season } from "../PremierLeague/types/seasons.js";
+import { getErrorMessages } from "../PremierLeague/services/API-Football.js";
+import { seasonsRepo } from "../PremierLeague/repos/seasonsRepo.js";
 
 export const getStandingsFromSeason = async (seasonId: number): Promise<TeamStandingsAPIResponse> => {
-    const season: Season | undefined = await getSeasonById(seasonId)
+    const season: Season | undefined = await seasonsRepo.getSeasonById(seasonId)
     if (!season) {
         throw new Error(`Failed to get season with id=${seasonId}`)
     }

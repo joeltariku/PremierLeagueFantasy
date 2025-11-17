@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'url'
-import { getFixturesFromSeason } from '../../api-clients/fixturesClient';
+import { getFixturesFromSeason } from '../../api-clients/fixturesClient.js';
 
 
 const __filename = fileURLToPath(import.meta.url);

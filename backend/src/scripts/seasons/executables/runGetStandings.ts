@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'url'
-import { getStandingsFromSeason } from '../../../api-clients/standingsClient';
+import { getStandingsFromSeason } from '../../../api-clients/standingsClient.js';
 
 const __filename = fileURLToPath(import.meta.url);
 

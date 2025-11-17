@@ -1,6 +1,6 @@
 import axios from "axios"
-import { TeamsAPIResponse } from "../PremierLeague/types/API-Football/teams"
-import { getErrorMessages } from "../PremierLeague/services/API-Football"
+import { TeamsAPIResponse } from "../PremierLeague/types/API-Football/teams.js"
+import { getErrorMessages } from "../PremierLeague/services/API-Football.js"
 
 export const getAPITeamsFromSeason = async (leagueId: number, startYear: number): Promise<TeamsAPIResponse> => {
     const response = await axios.get<TeamsAPIResponse>('https://v3.football.api-sports.io/teams', {

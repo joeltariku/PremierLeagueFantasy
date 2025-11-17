@@ -1,8 +1,8 @@
 import axios from "axios";
 import dotenv from 'dotenv'
-import { League } from "../../PremierLeague/types/league.ts";
-import { conn } from "../../utils/db.ts";
-import { leaguesRepo } from "../../PremierLeague/repos/leaguesRepo.ts";
+import { League } from "../../PremierLeague/types/league.js";
+import { conn } from "../../utils/db.js";
+import { leaguesRepo } from "../../PremierLeague/repos/leaguesRepo.js";
 
 dotenv.config()
 

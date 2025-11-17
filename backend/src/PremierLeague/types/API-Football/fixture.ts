@@ -1,4 +1,4 @@
-import { APIResponse } from "./response";
+import { APIResponse } from "./response.js";
 
 export interface APIFixture {
     fixture: {

@@ -1,11 +1,8 @@
 import express, { Request, Response } from 'express';
-import axios from 'axios';
 //const cors = require('cors');
 import dotenv from 'dotenv'
-import mongoose from 'mongoose';
-import Team from './PremierLeague/models/team.js'
-import teamsRouter from './PremierLeague/controllers/team.js'
-import leaguesRouter from './PremierLeague/controllers/leagues.ts';
+// import teamsRouter from './PremierLeague/controllers/team.js'
+import leaguesRouter from './PremierLeague/controllers/leagues.js';
 import swaggerUi from 'swagger-ui-express'
 import YAML from 'yamljs';
 
@@ -80,7 +77,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 //   }
 // })
 
-app.use('/api/premierleague', teamsRouter)
+// app.use('/api/premierleague', teamsRouter)
 app.use('/api/leagues', leaguesRouter)
 
 export default app

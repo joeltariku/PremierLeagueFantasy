@@ -1,9 +1,9 @@
-import { getAPIFixturesFromSeasonGameweek, getFixturesFromSeason } from "../../api-clients/fixturesClient"
-import { fixturesRepo } from "../repos/fixturesRepo"
-import { seasonsRepo } from "../repos/seasonsRepo"
-import { APIFixture, FixtureAPIResposne } from "../types/API-Football/fixture"
-import { Fixture } from "../types/fixture"
-import { Season } from "../types/seasons"
+import { getAPIFixturesFromSeasonGameweek, getFixturesFromSeason } from "../../api-clients/fixturesClient.js"
+import { fixturesRepo } from "../repos/fixturesRepo.js"
+import { seasonsRepo } from "../repos/seasonsRepo.js"
+import { APIFixture, FixtureAPIResposne } from "../types/API-Football/fixture.js"
+import { Fixture } from "../types/fixture.js"
+import { Season } from "../types/seasons.js"
 
 type FixturesRepoPort = Pick<typeof fixturesRepo, 'insertFixtures' | 'updateFixtures'>
 type SeasonsRepoPort  = Pick<typeof seasonsRepo,  'getSeasonById'>

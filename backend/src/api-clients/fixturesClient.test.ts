@@ -1,8 +1,8 @@
 import axios from "axios";
-import { Season } from "../PremierLeague/types/seasons";
-import { FixtureAPIResposne } from "../PremierLeague/types/API-Football/fixture";
-import { getAPIFixturesFromSeasonGameweek, getFixturesFromSeason } from "./fixturesClient";
-import { seasonsRepo } from "../PremierLeague/repos/seasonsRepo";
+import { Season } from "../PremierLeague/types/seasons.js";
+import { FixtureAPIResposne } from "../PremierLeague/types/API-Football/fixture.js";
+import { getAPIFixturesFromSeasonGameweek, getFixturesFromSeason } from "./fixturesClient.js";
+import { seasonsRepo } from "../PremierLeague/repos/seasonsRepo.js";
 
 
 

@@ -1,4 +1,4 @@
-import { APIError } from "../types/API-Football/error";
+import { APIError } from "../types/API-Football/error.js";
 
 export const getErrorMessages = (errors: APIError): string[] => {
     if (Array.isArray(errors)) return errors

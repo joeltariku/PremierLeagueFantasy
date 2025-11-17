@@ -1,6 +1,6 @@
 import { QueryResult, QueryResultRow } from "pg"
-import { Fixture } from "../types/fixture"
-import { conn } from "../../utils/db"
+import { Fixture } from "../types/fixture.js"
+import { conn } from "../../utils/db.js"
 
 type DB = {
     query: <T extends QueryResultRow>(text: string, params?: any[]) => Promise<QueryResult<T>>

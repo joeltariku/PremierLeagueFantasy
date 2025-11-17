@@ -1,6 +1,6 @@
 import { QueryResult, QueryResultRow } from "pg"
-import { League } from "../types/league.ts"
- import { conn } from "../../utils/db"
+import { League } from "../types/league.js"
+ import { conn } from "../../utils/db.js"
 
 type DB = {
     query: <T extends QueryResultRow>(text: string, params?: any[]) => Promise<QueryResult<T>>

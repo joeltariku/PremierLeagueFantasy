@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'url'
-import { conn } from '../../utils/db';
-import { fixturesService } from '../../PremierLeague/services/fixturesService';
+import { conn } from '../../utils/db.js';
+import { fixturesService } from '../../PremierLeague/services/fixturesService.js';
 
 const __filename = fileURLToPath(import.meta.url)
 

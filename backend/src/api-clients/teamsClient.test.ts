@@ -1,6 +1,6 @@
 import axios from "axios";
-import { TeamsAPIResponse } from "../PremierLeague/types/API-Football/teams";
-import { getAPITeamsFromSeason } from "./teamsClient";
+import { TeamsAPIResponse } from "../PremierLeague/types/API-Football/teams.js";
+import { getAPITeamsFromSeason } from "./teamsClient.js";
 import { parseAsync } from "@babel/core";
 
 jest.mock('axios')
