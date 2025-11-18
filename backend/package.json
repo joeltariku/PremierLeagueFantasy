@@ -13,6 +13,7 @@
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
     "migrate:prod": "cross-env NODE_ENV=production tsx src/utils/migrateTest.ts",
     "migrate:test": "cross-env NODE_ENV=test tsx src/utils/migrateTest.ts",
+    "migrate:prod": "cross-env NODE_ENV=production tsx src/utils/migrateTest.ts",
     "add:teamsFromSeason": "npx tsx scripts/teams/executables/runAddTeamsFromSeason.ts",
     "getFixturesFromSeason": "npx tsx scripts/fixtures/runGetFixturesFromSeason.ts",
     "addFixturesFromSeason": "npx tsx src/scripts/fixtures/runAddFixturesFromSeason.ts",
