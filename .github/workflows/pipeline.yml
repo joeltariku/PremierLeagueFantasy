@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request: 
+    branches: [main]
+    types: [opened, synchronize]
 
 jobs: 
   start_pipeline:
@@ -56,3 +59,6 @@ jobs:
       - name: Test client
         working-directory: ./client
         run: npm run test
+      - name: Trigger Deployment
+        if: ${{ github.event_name == 'push' }}
+        run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
