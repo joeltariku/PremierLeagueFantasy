@@ -3,22 +3,29 @@ import { Pool, PoolConfig } from "pg";
 
 dotenv.config()
 
-let pool: Pool | null = null;
+let conn: Pool;
 let ended = false;
 
 const isTest = process.env.NODE_ENV === 'test'
 const isDevelopment = process.env.NODE_ENV === 'development'
+const isProd = process.env.NODE_ENV === 'production'
 
-const conn = new Pool({
-    host: 'localhost',
-    user: 'postgres',
-    port: Number(process.env.PG_PORT),
-    password: process.env.PG_PASSWORD,
-    database: isTest ? 'FantasyPL_Test' : 'FantasyPL'
-})
+if (isProd) {
+  conn = new Pool({
+    connectionString: process.env.DATABASE_URL_INTERNAL
+  })
+} else {
+    conn = new Pool({
+      host: 'localhost',
+      user: 'postgres',
+      port: Number(process.env.PG_PORT),
+      password: process.env.PG_PASSWORD,
+      database: isTest ? 'FantasyPL_Test' : 'FantasyPL'
+  })
+}
 
 conn.on('connect', () => {
-    conn.query('SELECT current_database()').then(result => {
+    conn!.query('SELECT current_database()').then(result => {
         console.log(`Connected to database: ${result.rows[0].current_database}`)
     })
 })
