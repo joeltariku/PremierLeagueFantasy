@@ -2,7 +2,7 @@ import { conn } from "./db.js"
 
 const migrate = async () => {
     try {
-        console.log('Running test DB migrations...')
+        console.log(`Running mitagrations for NODE_ENV=${process.env.NODE_ENV}...`)
 
         await conn.query(`
             CREATE TABLE IF NOT EXISTS public.leagues
@@ -97,6 +97,8 @@ const migrate = async () => {
         console.log('Migrations finished')
     } catch (err) {
         console.error(err)
+    } finally {
+        conn.end()
     }
 }
 
