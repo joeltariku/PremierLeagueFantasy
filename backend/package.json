@@ -11,6 +11,7 @@
     "build:ui": "shx rm -rf dist && cd ../client && npm run build && shx cp -r dist ../backend",
     "build": "npm run build:ui && npm run build:server",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
+    "migrate:prod": "cross-env NODE_ENV=production tsx src/utils/migrateTest.ts",
     "migrate:test": "cross-env NODE_ENV=test tsx src/utils/migrateTest.ts",
     "add:teamsFromSeason": "npx tsx scripts/teams/executables/runAddTeamsFromSeason.ts",
     "getFixturesFromSeason": "npx tsx scripts/fixtures/runGetFixturesFromSeason.ts",

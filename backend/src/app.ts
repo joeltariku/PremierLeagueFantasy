@@ -18,4 +18,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.use('/api/leagues', leaguesRouter)
 
+app.get('/health', (req, res) => {
+  res.send('ok')
+})
+
 export default app
