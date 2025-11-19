@@ -23,7 +23,7 @@ const config: Config = {
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom: [
-    '**/*.{ts,tsx,js,jsx}'
+    '**/*.{ts,tsx}'
   ],
 
   // The directory where Jest should output its coverage files
@@ -32,12 +32,10 @@ const config: Config = {
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
     "\\\\node_modules\\\\",
-    '/backend/coverage/',
-    '/backend/coverage/lcov-report',
-    '/backend/dist',
-    '/backend/utils/config.js',
-    '/backend/jest.config.ts',
-    '/backend'
+    '/coverage/',
+    '/dist/',
+    '/utils/config.js',
+    '/jest.config.ts',
   ],
 
   // Indicates which provider should be used to instrument code for coverage
@@ -112,7 +110,7 @@ const config: Config = {
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  // preset: undefined,
+  // preset: 'ts-jest/presets/default-esm',
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -156,7 +154,7 @@ const config: Config = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  // testEnvironment: "jest-environment-node",
+  testEnvironment: "node",
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
