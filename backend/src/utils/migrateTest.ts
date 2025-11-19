@@ -97,8 +97,6 @@ const migrate = async () => {
         console.log('Migrations finished')
     } catch (err) {
         console.error(err)
-    } finally {
-        conn.end()
     }
 }
 
