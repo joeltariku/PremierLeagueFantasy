@@ -155,4 +155,83 @@ describe('leaguesController', () => {
             expect(response.body).toEqual({ error: 'Failed to create league'})
         })
     })
+    describe('DELETE /api/leagues', () => {
+        it('result is json', async () => {
+            await api
+                .delete('/api/leagues')
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+        })
+        it('successfully deletes all leagues', async () => {
+            const result = await api.delete('/api/leagues')
+            expect(result.body).toEqual('Deleted 2 leagues')
+
+            const leaguesResponse = await api.get('/api/leagues')
+            expect(leaguesResponse.body).toHaveLength(0)
+        })
+        it('handles deletion error where other tables have rows referencing one of the leagues', async () => {
+            jest.spyOn(leaguesRepo, 'deleteAllLeagues').mockRejectedValue({ detail: 'Key (id)=(39) is still referenced from table "seasons".' })
+
+            const result = await api.delete('/api/leagues')
+            expect(result.status).toBe(500)
+            expect(result.body).toEqual({ error: 'Failed to delete leagues. Key (id)=(39) is still referenced from table "seasons".'})
+        })
+        it('handles deletion error that is an instance of Error', async () => {
+            jest.spyOn(leaguesRepo, 'deleteAllLeagues').mockRejectedValue(new Error('Could not connect to database'))
+
+            const result = await api.delete('/api/leagues')
+            expect(result.status).toBe(500)
+            expect(result.body).toEqual({ error: 'Failed to delete leagues. Could not connect to database' })
+        })
+        it('handles deletion error that is an instance of Error', async () => {
+            jest.spyOn(leaguesRepo, 'deleteAllLeagues').mockRejectedValue({ error: 'Something unknown'})
+
+            const result = await api.delete('/api/leagues')
+            expect(result.status).toBe(500)
+            expect(result.body).toEqual({ error: 'An unknown error occurred.' })
+        })
+    })
+    describe('DELETE /api/leagues/:id', () => {
+        it('result is json', async () => {
+            await api
+                .delete('/api/leagues/39')
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+        })
+        it('successfully deletes league with if it exists', async () => {
+            const result = await api.delete('/api/leagues/39')
+            expect(result.body).toEqual('Deleted league with id=39')
+
+            const leaguesResponse = await api.get('/api/leagues')
+            expect(leaguesResponse.body).toHaveLength(1)
+        })
+        it('if no league with the id exists then response shares that information', async () => {
+            const result = await api.delete('/api/leagues/12')
+            expect(result.body).toEqual('No league exists with id=12')
+
+            const leaguesResponse = await api.get('/api/leagues')
+            expect(leaguesResponse.body).toHaveLength(2)
+        })
+        it('handles deletion error where other tables have rows referencing the league', async () => {
+            jest.spyOn(leaguesRepo, 'deleteLeagueById').mockRejectedValue({ detail: 'Key (id)=(39) is still referenced from table "seasons".' })
+
+            const result = await api.delete('/api/leagues/39')
+            expect(result.status).toBe(500)
+            expect(result.body).toEqual({ error: 'Failed to delete league. Key (id)=(39) is still referenced from table "seasons".'})
+        })
+        it('handles deletion error that is an instance of Error', async () => {
+            jest.spyOn(leaguesRepo, 'deleteLeagueById').mockRejectedValue(new Error('Could not connect to database'))
+
+            const result = await api.delete('/api/leagues/39')
+            expect(result.status).toBe(500)
+            expect(result.body).toEqual({ error: 'Failed to delete league. Could not connect to database' })
+        })
+        it('handles deletion error that is an instance of Error', async () => {
+            jest.spyOn(leaguesRepo, 'deleteLeagueById').mockRejectedValue({ error: 'Something unknown'})
+
+            const result = await api.delete('/api/leagues/39')
+            expect(result.status).toBe(500)
+            expect(result.body).toEqual({ error: 'An unknown error occurred.' })
+        })
+    })
 })
