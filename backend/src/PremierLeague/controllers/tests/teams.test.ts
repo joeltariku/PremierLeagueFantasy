@@ -1,11 +1,16 @@
 import supertest from "supertest";
-import app from "../../../app.js";
+import  { buildApp } from "../../../app.js";
 import { conn } from "../../../utils/db.js";
 import { Team } from "../../types/teams.js";
 import { jest } from "@jest/globals";
-import { teamsRepo } from "../../repos/teamsRepo.js";
+import { makeTeamsRepo } from "../../repos/teamsRepo.js";
+import { PoolClient } from "pg";
 
-const api = supertest(app)
+let app: ReturnType<typeof buildApp>
+let api: ReturnType<typeof supertest>
+let client: PoolClient
+
+let teamsRepo: ReturnType<typeof makeTeamsRepo>
 
 const mockTeams: Team[] = [
     {
@@ -28,16 +33,34 @@ const mockTeams: Team[] = [
     }
 ]
 
+let mockTeam1
+let mockTeam2
+let mockTeam3
+
 describe('teamsController', () => {
     beforeAll(async () => {
         const { rows } = await conn.query('SELECT current_database()')
         expect(rows[0].current_database).toBe('FantasyPL_Test')
+        await conn.query('TRUNCATE teams RESTART IDENTITY CASCADE')
     })
     beforeEach(async () => {
-        await conn.query('TRUNCATE teams CASCADE')
-        await conn.query('INSERT INTO teams (id, name, code, country) VALUES ($1, $2, $3, $4)', [mockTeams[0].id, mockTeams[0].name, mockTeams[0].code, mockTeams[0].country])
-        await conn.query('INSERT INTO teams (id, name, code, country) VALUES ($1, $2, $3, $4)', [mockTeams[1].id, mockTeams[1].name, mockTeams[1].code, mockTeams[1].country])
-        await conn.query('INSERT INTO teams (id, name, code, country) VALUES ($1, $2, $3, $4)', [mockTeams[2].id, mockTeams[2].name, mockTeams[2].code, mockTeams[2].country])
+        client = await conn.connect()
+        await client.query('BEGIN')
+
+        teamsRepo = makeTeamsRepo(client)
+        app = buildApp({
+            db: client,
+            teamsRepo
+        })
+        api = supertest(app)
+        
+        mockTeam1 = await teamsRepo.insertTeam(mockTeams[0])
+        mockTeam2 = await teamsRepo.insertTeam(mockTeams[1])
+        mockTeam3 = await teamsRepo.insertTeam(mockTeams[2])
+    })
+    afterEach(async () => {
+        await client.query('ROLLBACK')
+        client.release()
         jest.restoreAllMocks()
     })
     afterAll(async () => {

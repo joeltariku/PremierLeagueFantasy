@@ -1,11 +1,14 @@
 import { jest } from '@jest/globals'
 import { conn } from '../../../utils/db.js'
 import supertest from 'supertest'
-import app from '../../../app.js'
 import { League } from '../../types/league.js'
-import { leaguesRepo } from '../../repos/leaguesRepo.js'
+import { makeLeaguesRepo } from '../../repos/leaguesRepo.js'
+import { PoolClient } from 'pg'
+import { buildApp } from '../../../app.js'
 
-const api = supertest(app)
+let app: ReturnType<typeof buildApp>
+let api: ReturnType<typeof supertest>
+let leaguesRepo: ReturnType<typeof makeLeaguesRepo>
 
 const mockLeagues: League[] = [
     {
@@ -19,17 +22,30 @@ const mockLeagues: League[] = [
         base_country: 'Spain'
     }   
 ]
-
-
+let client: PoolClient
 describe('leaguesController', () => {
     beforeAll(async () => {
         const { rows } = await conn.query('SELECT current_database()')
         expect(rows[0].current_database).toBe('FantasyPL_Test')
+        await conn.query('TRUNCATE leagues RESTART IDENTITY CASCADE')
     })
     beforeEach(async () => {
-        await conn.query('TRUNCATE leagues CASCADE')
-        await conn.query('INSERT INTO leagues (id, name, base_country) VALUES ($1, $2, $3)', [mockLeagues[0].id, mockLeagues[0].name, mockLeagues[0].base_country])
-        await conn.query('INSERT INTO leagues (id, name, base_country) VALUES ($1, $2, $3)', [mockLeagues[1].id, mockLeagues[1].name, mockLeagues[1].base_country])
+        client = await conn.connect()
+        await client.query('BEGIN')
+
+        leaguesRepo = makeLeaguesRepo(client)
+        app = buildApp({
+            db: client,
+            leaguesRepo: leaguesRepo
+        })
+        api = supertest(app)
+
+        await leaguesRepo.insertLeague(mockLeagues[0])
+        await leaguesRepo.insertLeague(mockLeagues[1])
+    })
+    afterEach(async () => {
+        await client.query('ROLLBACK')
+        client.release()
         jest.restoreAllMocks()
     })
     afterAll(async () => {
