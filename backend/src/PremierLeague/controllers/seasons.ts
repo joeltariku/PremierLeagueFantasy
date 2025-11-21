@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { makeSeasonsRepo } from '../repos/seasonsRepo.js'
+import { makeSeasonsRepo, seasonsRepo } from '../repos/seasonsRepo.js'
 
 export const makeSeasonsRouter = (seasonsRepo: ReturnType<typeof makeSeasonsRepo>) => {
     const seasonsRouter = express.Router()
@@ -26,9 +26,9 @@ export const makeSeasonsRouter = (seasonsRepo: ReturnType<typeof makeSeasonsRepo
 
     seasonsRouter.post('/', async (req: Request, res: Response) => {
         try {
-            const { name, league_id } = req.body
-            const start_date = new Date(req.body.start_date)
-            const end_date = new Date(req.body.end_date)
+            const { name, league_id, start_date, end_date } = req.body
+            // const start_date = new Date(req.body.start_date)
+            // const end_date = new Date(req.body.end_date)
             if (!name || !league_id || !start_date || !end_date) {
                 return res.status(400).json({ error: 'Missing required fields.' })
             }

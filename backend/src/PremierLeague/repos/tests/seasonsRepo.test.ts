@@ -12,15 +12,15 @@ const mockSeasons: Season[] = [
     {
         id: 8,
         name: '2024/25',
-        start_date: new Date('2024-08-17'),
-        end_date: new Date('2025-05-26'),
+        start_date: '2024-08-17',
+        end_date: '2025-05-26',
         league_id: 39
     },
     {
         id: 10,
         name: '2025/26',
-        start_date: new Date('2025-08-16'),
-        end_date: new Date('2026-05-25'),
+        start_date: '2025-08-16',
+        end_date: '2026-05-25',
         league_id: 39
     }
 ]

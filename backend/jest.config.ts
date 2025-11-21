@@ -36,6 +36,7 @@ const config: Config = {
     '/dist/',
     '/utils/config.js',
     '/jest.config.ts',
+    '/src/PremierLeague/types'
   ],
 
   // Indicates which provider should be used to instrument code for coverage

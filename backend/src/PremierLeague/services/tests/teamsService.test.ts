@@ -35,8 +35,8 @@ const mockTeams: Team[] = [
 const mockSeason: Season = {
     id: 14,
     name: '2025/26',
-    start_date: new Date(),
-    end_date: new Date(),
+    start_date: '2025-08-19',
+    end_date: '2026-05-14',
     league_id: 39
 }
 
