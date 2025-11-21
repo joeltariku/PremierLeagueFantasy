@@ -26,7 +26,7 @@ export const makeTeamsService = (
             return 0
         }
         const { league_id, start_date } = season
-        const year = start_date.getFullYear()
+        const year = Number(start_date.slice(0,4))
 
         const apiTeams = await getAPITeamsFromSeason(league_id, year)
         const teams: Team[] = apiTeams.response.map((teamObject: APITeam) => {

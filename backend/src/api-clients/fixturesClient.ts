@@ -12,7 +12,7 @@ export const getFixturesFromSeason = async (seasonId: number): Promise<FixtureAP
     }
 
     const leagueId = season.league_id;
-    const startYear = season.start_date.getFullYear()
+    const startYear = Number(season.start_date.slice(0,4))
 
     const response = await axios.get('https://v3.football.api-sports.io/fixtures', {
         headers: {
@@ -40,7 +40,7 @@ export const getAPIFixturesFromSeasonGameweek = async (seasonId: number, gamewee
     }
 
     const leagueId = season.league_id
-    const startYear = season.start_date.getFullYear()
+    const startYear = Number(season.start_date.slice(0,4))
     const round = `Regular Season - ${gameweek}`
 
     const response = await axios.get('https://v3.football.api-sports.io/fixtures', {

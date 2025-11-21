@@ -1,7 +1,9 @@
 import dotenv from "dotenv";
-import { Pool, PoolConfig } from "pg";
+import { Pool, PoolConfig, types } from "pg";
 
 dotenv.config()
+
+types.setTypeParser(1082, (val) => val)
 
 let conn: Pool;
 let ended = false;

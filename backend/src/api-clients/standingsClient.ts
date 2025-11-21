@@ -11,7 +11,7 @@ export const getStandingsFromSeason = async (seasonId: number): Promise<TeamStan
     }
 
     const leagueId = season.league_id;
-    const startYear = season.start_date.getFullYear()
+    const startYear = Number(season.start_date.slice(0,4))
 
     const response = await axios.get('https://v3.football.api-sports.io/standings', {
         headers: {
