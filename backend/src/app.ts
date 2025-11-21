@@ -1,31 +1,58 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv'
-import leaguesRouter from './PremierLeague/controllers/leagues.js';
+import  { makeLeaguesRouter } from './PremierLeague/controllers/leagues.js';
 import swaggerUi from 'swagger-ui-express'
 import YAML from 'yamljs';
-import teamsRouter from './PremierLeague/controllers/teams.js';
+import { DB, makeSeasonsRepo } from './PremierLeague/repos/seasonsRepo.js';
+import { conn } from './utils/db.js';
+import { makeLeaguesRepo } from './PremierLeague/repos/leaguesRepo.js';
+import { makeTeamsRepo } from './PremierLeague/repos/teamsRepo.js';
+import { makeSeasonsRouter } from './PremierLeague/controllers/seasons.js';
+import { makeTeamsRouter } from './PremierLeague/controllers/teams.js';
 
 const swaggerDocument = YAML.load('./swagger.yaml')
 
 
 dotenv.config();
 
+type BuildAppOptions = {
+    db: DB,
+    leaguesRepo?: ReturnType<typeof makeLeaguesRepo>,
+    seasonsRepo?: ReturnType<typeof makeSeasonsRepo>,
+    teamsRepo?: ReturnType<typeof makeTeamsRepo>
+}
 
-const app = express();
+export const buildApp = (options: BuildAppOptions = {db: conn}) => {
+    const { db } = options
 
-app.use(express.static('dist'))
-app.use(express.json())
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+    const leaguesRepo = options.leaguesRepo ?? makeLeaguesRepo(db)
+    const leaguesRouter = makeLeaguesRouter(leaguesRepo)
 
-app.use('/api/leagues', leaguesRouter)
-app.use('/api/teams', teamsRouter)
+    const seasonsRepo = options.seasonsRepo ?? makeSeasonsRepo(db)
+    const seasonsRouter = makeSeasonsRouter(seasonsRepo)
 
-app.get('/health', (req, res) => {
-  res.send('ok')
-})
+    const teamsRepo = options.teamsRepo ?? makeTeamsRepo(db)
+    const teamsRouter = makeTeamsRouter(teamsRepo)
 
-app.get('/version', (req, res) => {
-    res.send('1')
-})
+    const app = express();
 
+    app.use(express.static('dist'))
+    app.use(express.json())
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+
+    app.use('/api/leagues', leaguesRouter)
+    app.use('/api/teams', teamsRouter)
+    app.use('/api/seasons', seasonsRouter)
+
+    app.get('/health', (req, res) => {
+    res.send('ok')
+    })
+
+    app.get('/version', (req, res) => {
+        res.send('1')
+    })
+    return app
+}
+
+const app = buildApp()
 export default app
