@@ -8,6 +8,8 @@ import { buildApp } from '../../../app.js'
 
 let app: ReturnType<typeof buildApp>
 let api: ReturnType<typeof supertest>
+let client: PoolClient
+
 let leaguesRepo: ReturnType<typeof makeLeaguesRepo>
 
 const mockLeagues: League[] = [
@@ -22,7 +24,7 @@ const mockLeagues: League[] = [
         base_country: 'Spain'
     }   
 ]
-let client: PoolClient
+
 describe('leaguesController', () => {
     beforeAll(async () => {
         const { rows } = await conn.query('SELECT current_database()')
@@ -36,7 +38,7 @@ describe('leaguesController', () => {
         leaguesRepo = makeLeaguesRepo(client)
         app = buildApp({
             db: client,
-            leaguesRepo: leaguesRepo
+            leaguesRepo
         })
         api = supertest(app)
 

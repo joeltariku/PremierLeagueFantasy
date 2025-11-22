@@ -9,6 +9,8 @@ import { makeLeaguesRepo } from './PremierLeague/repos/leaguesRepo.js';
 import { makeTeamsRepo } from './PremierLeague/repos/teamsRepo.js';
 import { makeSeasonsRouter } from './PremierLeague/controllers/seasons.js';
 import { makeTeamsRouter } from './PremierLeague/controllers/teams.js';
+import { makeTeamSeasonsRepo } from './PremierLeague/repos/teamSeasonsRepo.js';
+import { makeTeamSeasonsRouter } from './PremierLeague/controllers/teamSeasons.js';
 
 const swaggerDocument = YAML.load('./swagger.yaml')
 
@@ -19,7 +21,8 @@ type BuildAppOptions = {
     db: DB,
     leaguesRepo?: ReturnType<typeof makeLeaguesRepo>,
     seasonsRepo?: ReturnType<typeof makeSeasonsRepo>,
-    teamsRepo?: ReturnType<typeof makeTeamsRepo>
+    teamsRepo?: ReturnType<typeof makeTeamsRepo>,
+    teamSeasonsRepo?: ReturnType<typeof makeTeamSeasonsRepo>
 }
 
 export const buildApp = (options: BuildAppOptions = {db: conn}) => {
@@ -34,6 +37,9 @@ export const buildApp = (options: BuildAppOptions = {db: conn}) => {
     const teamsRepo = options.teamsRepo ?? makeTeamsRepo(db)
     const teamsRouter = makeTeamsRouter(teamsRepo)
 
+    const teamSeasonsRepo = options.teamSeasonsRepo ?? makeTeamSeasonsRepo(db)
+    const teamSeasonsRouter = makeTeamSeasonsRouter(teamSeasonsRepo)
+
     const app = express();
 
     app.use(express.static('dist'))
@@ -43,6 +49,7 @@ export const buildApp = (options: BuildAppOptions = {db: conn}) => {
     app.use('/api/leagues', leaguesRouter)
     app.use('/api/teams', teamsRouter)
     app.use('/api/seasons', seasonsRouter)
+    app.use('/api/teamSeasons', teamSeasonsRouter)
 
     app.get('/health', (req, res) => {
     res.send('ok')
