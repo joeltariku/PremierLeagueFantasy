@@ -43,11 +43,12 @@ describe('seasonsController', () => {
     beforeAll(async () => {
         const { rows } = await conn.query('SELECT current_database()')
         expect(rows[0].current_database).toBe('FantasyPL_Test')
-        await conn.query('TRUNCATE seasons, leagues RESTART IDENTITY CASCADE')
     })
     beforeEach(async () => {
         client = await conn.connect()
         await client.query('BEGIN')
+        await client.query('DELETE from seasons')
+        await client.query('DELETE from leagues')
 
         leaguesRepo = makeLeaguesRepo(client)
         seasonsRepo = makeSeasonsRepo(client)
