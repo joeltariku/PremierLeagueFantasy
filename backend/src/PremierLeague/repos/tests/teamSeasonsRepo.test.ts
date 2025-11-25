@@ -35,6 +35,16 @@ describe('teamSeasonsRepo', () => {
             rowCount: mockTeamSeasons.length
         } as QueryResult<TeamSeason>)
     })
+    describe('getAllTeamSeasons', () => {
+        it('makes correct query and returns all rows', async () => {
+            const result = await mockRepo.getAllTeamsFromSeason(9)
+            expect(mockDB.query).toHaveBeenCalledWith(
+                'SELECT team_id FROM team_seasons WHERE season_id = $1',
+                [9]
+            )
+            expect(result).toEqual([19, 20])
+        })
+    })
     describe('getTeamSeasonBySeasonIdAndTeamId', () => {
         it('makes correct query and returns first row', async () => {
             const result = await mockRepo.getTeamSeasonBySeasonIdAndTeamId(9, 19)
