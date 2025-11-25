@@ -18,7 +18,9 @@
     "getFixturesFromSeason": "npx tsx scripts/fixtures/runGetFixturesFromSeason.ts",
     "addFixturesFromSeason": "npx tsx src/scripts/fixtures/runAddFixturesFromSeason.ts",
     "updateFixturesFromGW": "npx tsx scripts/fixtures/runUpdateFixturesFromGW.ts",
-    "getStandingsFromSeason": "npx tsx scripts/seasons/executables/runGetStandings.ts"
+    "getStandingsFromSeason": "npx tsx scripts/seasons/executables/runGetStandings.ts",
+    "addPlayersFromTeam": "npx tsx src/scripts/players/addPlayersFromTeam.ts",
+    "addAllPlayersFromSeason": "npx tsx src/scripts/players/addAllPlayersFromSeason.ts"
   },
   "type": "module",
   "author": "",

@@ -1,12 +1,18 @@
 import { QueryResult, QueryResultRow } from "pg"
 import { TeamSeason } from "../types/teamSeason.js"
 import { conn } from "../../utils/db.js"
+import { get } from "mongoose"
 
 type DB = {
     query: <T extends QueryResultRow>(text: string, params?: any[]) => Promise<QueryResult<T>>
 }
 
 export const makeTeamSeasonsRepo = (db: DB) => {
+    const getAllTeamsFromSeason = async (seasonId: number): Promise<number[]> => {
+        const fetch_query = 'SELECT team_id FROM team_seasons WHERE season_id = $1'
+        const result = await db.query<{ team_id: number }>(fetch_query, [seasonId])
+        return result.rows.map(row => row.team_id)
+    }
     const getTeamSeasonBySeasonIdAndTeamId = async (seasonId: number, teamId: number): Promise<TeamSeason | undefined> => {
         const fetch_query = 'SELECT * FROM team_seasons WHERE season_id = $1 AND team_id = $2'
         const result = await db.query<TeamSeason>(fetch_query, [seasonId, teamId])
@@ -33,6 +39,7 @@ export const makeTeamSeasonsRepo = (db: DB) => {
     }
 
     return {
+        getAllTeamsFromSeason,
         getTeamSeasonBySeasonIdAndTeamId,
         insertTeamSeason,
         insertTeamSeasons

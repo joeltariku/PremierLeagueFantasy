@@ -13,6 +13,8 @@ import { makeTeamSeasonsRepo } from './PremierLeague/repos/teamSeasonsRepo.js';
 import { makeTeamSeasonsRouter } from './PremierLeague/controllers/teamSeasons.js';
 import { makeFixturesRepo } from './PremierLeague/repos/fixturesRepo.js';
 import { makeFixturesRouter } from './PremierLeague/controllers/fixtures.js';
+import { makePositionsRepo } from './PremierLeague/repos/positionsRepo.js';
+import { makePlayersRepo } from './PremierLeague/repos/playersRepo.js';
 
 const swaggerDocument = YAML.load('./swagger.yaml')
 
@@ -24,8 +26,10 @@ type BuildAppOptions = {
     leaguesRepo?: ReturnType<typeof makeLeaguesRepo>,
     seasonsRepo?: ReturnType<typeof makeSeasonsRepo>,
     teamsRepo?: ReturnType<typeof makeTeamsRepo>,
-    teamSeasonsRepo?: ReturnType<typeof makeTeamSeasonsRepo>
-    fixturesRepo?: ReturnType<typeof makeFixturesRepo>
+    teamSeasonsRepo?: ReturnType<typeof makeTeamSeasonsRepo>,
+    fixturesRepo?: ReturnType<typeof makeFixturesRepo>,
+    posotionsRepo?: ReturnType<typeof makePositionsRepo>,
+    playersRepo?: ReturnType<typeof makePlayersRepo>,
 }
 
 export const buildApp = (options: BuildAppOptions = {db: conn}) => {
